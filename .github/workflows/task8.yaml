@@ -1,0 +1,33 @@
+name: 🔍 Run Unit Tests and Notify
+
+on: [push]
+
+jobs:
+  test:
+    name: Execute Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: 🔧 Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🧪 Run Tests
+        run: pytest tests
+        continue-on-error: true  # Ensures the next step runs even if this step fails
+
+      - name: 📬 Notify on Teams if Tests Fail
+        if: ${{ failure() }}
+        uses: some-username/microsoft-teams-action@v1  # You will need to find or create a suitable action
+        with:
+          webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}  # Set this secret in your GitHub repo settings
+          message: 'Unit tests failed! Check the run details here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'

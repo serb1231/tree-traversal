@@ -1,21 +1,18 @@
-name: 🚀 Run Tree Script
+name: 🚀 Run Tree Script on PR
 
 on:
-  push:
+  pull_request:
     branches:
-      - main  # Trigger on pushes to the main branch; adjust if using a different branch
-  workflow_dispatch:  # Allows manual triggering of the workflow
+      - main
 
 jobs:
   run:
-    name: 🚀 Run Tree.py
+    name: 🚀 Run Tree.py on PR
     runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Fetches all history for all branches and tags (needed for some specific use cases)
 
       - name: 🚀 Run Tree.py
         run: python3 tree.py

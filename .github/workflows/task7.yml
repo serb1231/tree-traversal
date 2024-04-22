@@ -1,0 +1,28 @@
+name: 📄 Generate Documentation
+
+on:
+  push:
+    tags:
+      - 'v*'  # Assumes tags are versioned as v1.0, v1.1, etc.
+
+jobs:
+  documentation:
+    name: Generate Doxygen Docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🛠 Install Doxygen
+        run: sudo apt-get install doxygen
+
+      - name: 📚 Generate Documentation
+        run: doxygen Doxyfile
+
+      - name: 📦 Upload Documentation as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Documentation
+          path: /path/to/generated/docs  # Update this path to where Doxygen outputs the docs
+
